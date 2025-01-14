@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кликни на Венома!</title> 
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #000; /* Черный фон */
+            font-family: 'Roboto', Arial, sans-serif;
+            color: white;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            height: 100%;
+            max-height: 700px;
+            background: #333; /* Серый фон панели */
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .character {
+            position: relative;
+            width: 60%; /* Размер Венома адаптирован под экран */
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .message {
+            position: absolute;
+            top: 10%;
+            width: 100%;
+            text-align: center;
+            font-size: 24px;
+            color: #ff0000;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .message.visible {
+            opacity: 1;
+        }
+
+        .counter {
+            position: absolute;
+            top: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="message" id="message">Venom!</div>
+        <div class="counter" id="counter">Venom-ы: 0</div>
+        <img src="venom.png" alt="Venom" class="character" id="character">
+    </div>
+
+    <!-- Аудио -->
+    <audio id="sound" src="venom-sound.mp3" preload="auto"></audio>
+
+    <script>
+        const character = document.getElementById('character');
+        const message = document.getElementById('message');
+        const counter = document.getElementById('counter');
+        const sound = document.getElementById('sound');
+        let venomCount = 0;
+
+        // Логика клика на Венома
+        const handleClick = () => {
+            sound.currentTime = 0; // Сбрасываем звук
+            sound.play(); // Воспроизводим звук
+
+            character.style.transform = 'scale(1.1)'; // Анимация
+            message.classList.add('visible'); // Показываем сообщение
+
+            venomCount++;
+            counter.textContent = `Venom-ы: ${venomCount}`; // Обновляем счетчик
+
+            setTimeout(() => {
+                message.classList.remove('visible'); // Убираем сообщение
+            }, 2000);
+
+            setTimeout(() => {
+                character.style.transform = 'scale(1)'; // Возвращаем анимацию
+            }, 300);
+        };
+
+        // Добавляем события для кликов и сенсорных экранов
+        character.addEventListener('click', handleClick);
+        character.addEventListener('touchstart', handleClick);
+    </script>
+</body>
+</html>
